@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DRAMA NEXUS</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+        
+        :root {
+            --bg: #ECECEC;
+            --yellow: #F7D32C;
+            --green: #A8F000;
+            --cyan: #49D8F5;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #D1D1D1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--black);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* UTILITY CLASSES */
+        .uppercase { text-transform: uppercase; }
+        .font-bold { font-weight: 800; }
+        .hidden { display: none; }
+        
+        /* BRUTALIST BORDER & SHADOW */
+        .brutal-border {
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0px var(--black);
+            transition: all 0.18s ease;
+        }
+        
+        .brutal-border:hover {
+            transform: translateY(-3px);
+            box-shadow: 11px 11px 0px var(--black);
+        }
+        
+        .brutal-btn {
+            background: var(--green);
+            border: 3px solid var(--black);
+            box-shadow: 4px 4px 0px var(--black);
+            padding: 12px 20px;
+            font-family: inherit;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .brutal-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--black);
+        }
+        
+        .brutal-input {
+            background: var(--gray);
+            border: 3px solid var(--black);
+            padding: 12px;
+            font-family: inherit;
+            font-weight: 700;
+            width: 100%;
+        }
+        
+        .brutal-input:focus {
+            outline: none;
+            background: var(--white);
+        }
+        
+        /* HEADER */
+        header {
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 4px solid var(--black);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--green);
+        }
+        
+        .app-title {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+        
+        .clock {
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 700;
+        }
+        
+        /* HERO SECTION */
+        .hero {
+            background: var(--yellow);
+            padding: 24px;
+            margin: 24px;
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0px var(--black);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .hero-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .hero-icon i {
+            font-size: 32px;
+            color: var(--green);
+        }
+        
+        .hero-content h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: var(--cyan);
+            border: 2px solid var(--black);
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        
+        .hero-subtitle {
+            font-size: 11px;
+            color: #333;
+        }
+        
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 100%;
+            padding: 0 24px 80px 24px;
+        }
+        
+        /* CARDS */
+        .card {
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0px var(--black);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .card-label {
+            background: var(--black);
+            color: var(--white);
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .card-text {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        /* DRAMA GRID */
+        .drama-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .drama-card {
+            background: var(--gray);
+            border: 3px solid var(--black);
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        
+        .drama-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 6px 6px 0px var(--black);
+        }
+        
+        .drama-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--black);
+        }
+        
+        .drama-card-content {
+            padding: 12px;
+        }
+        
+        .drama-card h3 {
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+        
+        /* TERMINAL */
+        .terminal {
+            background: var(--black);
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0px var(--black);
+            margin-bottom: 24px;
+        }
+        
+        .terminal-header {
+            background: #1a1a1a;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
+        
+        .terminal-filename {
+            color: #888;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+        
+        .terminal-body {
+            padding: 16px;
+            color: var(--green);
+            font-size: 11px;
+            min-height: 100px;
+        }
+        
+        .terminal-line {
+            margin-bottom: 4px;
+        }
+        
+        .terminal-cyan { color: var(--cyan); }
+        .terminal-white { color: var(--white); }
+        
+        /* STEP NAVIGATION */
+        .step-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .step {
+            flex: 1;
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 12px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .step.active {
+            background: var(--black);
+            color: var(--white);
+            border-bottom: 4px solid var(--yellow);
+        }
+        
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--black);
+            border-top: 4px solid var(--black);
+            display: flex;
+            z-index: 50;
+        }
+        
+        .nav-item {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            color: #666;
+            cursor: pointer;
+            border-right: 2px solid #333;
+            transition: all 0.18s;
+        }
+        
+        .nav-item:last-child {
+            border-right: none;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            color: var(--green);
+            background: #111;
+        }
+        
+        .nav-item i {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item span {
+            font-size: 9px;
+            font-weight: 700;
+        }
+        
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100%;
+            background: var(--bg);
+            border-right: 4px solid var(--black);
+            z-index: 100;
+            transition: left 0.3s;
+            overflow-y: auto;
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        
+        .sidebar-header {
+            background: var(--yellow);
+            border-bottom: 4px solid var(--black);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sidebar-close {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--black);
+        }
+        
+        .sidebar-menu {
+            padding: 16px;
+        }
+        
+        .sidebar-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: var(--gray);
+            border: 3px solid var(--black);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-item:hover {
+            background: var(--white);
+            transform: translateX(4px);
+        }
+        
+        /* OVERLAY */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 90;
+            display: none;
+        }
+        
+        .overlay.show {
+            display: block;
+        }
+        
+        /* BANNER */
+        .banner {
+            background: var(--black);
+            color: var(--green);
+            padding: 16px 24px;
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 11px;
+            text-shadow: 0 0 10px var(--green);
+            margin-top: 24px;
+            border: 4px solid var(--black);
+        }
+        
+        /* FOOTER */
+        footer {
+            background: var(--bg);
+            padding: 24px;
+            border-top: 4px solid var(--black);
+            text-align: center;
+        }
+        
+        .footer-badge {
+            background: var(--yellow);
+            border: 3px solid var(--black);
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 800;
+            margin-top: 8px;
+        }
+        
+        /* ANIMATIONS */
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--green);
+            animation: typing 2s steps(30, end);
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .hero {
+                margin: 16px;
+                padding: 16px;
+            }
+            
+            .container {
+                padding: 0 16px 80px 16px;
+            }
+            
+            .drama-grid {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="menu-btn" onclick="toggleSidebar()">
+            <i class="ph ph-list"></i>
+        </div>
+        <h1 class="app-title">DRAMA NEXUS</h1>
+        <div class="clock" id="clock">00:00</div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="font-bold uppercase">Menu Utama</span>
+            <div class="sidebar-close" onclick="toggleSidebar()">
+                <i class="ph ph-x"></i>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-item" onclick="navigate('home'); toggleSidebar()">
+                <i class="ph ph-house"></i> HOME
+            </div>
+            <div class="sidebar-item" onclick="alert('API: ' + currentSource); toggleSidebar()">
+                <i class="ph ph-cloud"></i> API SERVICE
+            </div>
+            <div class="sidebar-item" onclick="window.open('https://t.me/CaaCyberr404')">
+                <i class="ph ph-telegram-logo"></i> DEVELOPER
+            </div>
+            <div class="sidebar-item" onclick="window.open('https://t.me/caaxratdev')">
+                <i class="ph ph-users"></i> CHANEL DEV
+            </div>
+            <div class="sidebar-item" onclick="openTools(); toggleSidebar()">
+                <i class="ph ph-wrench"></i> TOOLS
+            </div>
+            <div class="sidebar-item" onclick="alert('History dari Firebase'); toggleSidebar()">
+                <i class="ph ph-clock-counter-clockwise"></i> HISTORY
+            </div>
+            <div class="sidebar-item" onclick="alert('Settings'); toggleSidebar()">
+                <i class="ph ph-gear"></i> SETTING
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <div class="hero-icon">
+            <i class="ph ph-film-strip"></i>
+        </div>
+        <div class="hero-content">
+            <span class="badge">V1.0 STABLE</span>
+            <h1 class="uppercase">DRAMA NEXUS</h1>
+            <p class="hero-subtitle">Platform Streaming Drama Otomatis dengan Multi-Source API</p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        
+        <!-- STEP NAVIGATION -->
+        <div class="step-nav">
+            <div class="step active" onclick="setStep(0)">HOME</div>
+            <div class="step" onclick="setStep(1)">DRAMA</div>
+            <div class="step" onclick="setStep(2)">TRENDING</div>
+        </div>
+
+        <!-- TERMINAL -->
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot red"></div>
+                <div class="terminal-dot yellow"></div>
+                <div class="terminal-dot green"></div>
+                <span class="terminal-filename">nexus_terminal.log</span>
+                <span style="margin-left: auto; font-size: 10px; color: #666;">2 LINES</span>
+            </div>
+            <div class="terminal-body" id="terminal">
+                <div class="terminal-line"><span class="terminal-cyan">></span> System initialized...</div>
+                <div class="terminal-line"><span class="terminal-cyan">></span> Waiting for user input...</div>
+            </div>
+        </div>
+
+        <!-- MAIN CARD -->
+        <div class="card">
+            <span class="card-label">STEP 01</span>
+            <h2 class="card-title">PILIH SUMBER API DRAMA</h2>
+            <p class="card-text">
+                Sistem mendukung multiple API sources. Jika satu source down, 
+                Anda dapat berpindah ke source lain dengan mudah.
+            </p>
+            
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+                <span class="badge" style="background: var(--yellow);">StarShort</span>
+                <span class="badge" style="background: var(--cyan);">StardustTV</span>
+                <span class="badge" style="background: var(--green);">DramaBox</span>
+            </div>
+
+            <select id="api-source" onchange="loadDrama()" class="brutal-input" style="margin-bottom: 16px;">
+                <option value="starshort">STARSHORT (Primary)</option>
+                <option value="stardusttv">STARDUSTTV (Backup 1)</option>
+                <option value="dramabox">DRAMABOX (Backup 2)</option>
+            </select>
+
+            <button class="brutal-btn" style="width: 100%;" onclick="loadDrama()">
+                <i class="ph ph-arrow-right"></i> MUAT DRAMA
+            </button>
+        </div>
+
+        <!-- DRAMA GRID -->
+        <div id="drama-grid" class="drama-grid">
+            <div class="drama-card brutal-border" style="background: var(--gray); display: flex; align-items: center; justify-content: center; padding: 40px;">
+                <span style="color: #666; font-size: 12px;">Memuat data...</span>
+            </div>
+        </div>
+
+        <!-- BANNER -->
+        <div class="banner">
+            SISTEM STREAMING DRAMA MULTI-SOURCE – AMAN & OTOMATIS
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <p style="font-size: 10px; color: #666; margin-bottom: 8px;">
+                DRAMA NEXUS – SISTEM STREAMING BERBASIS WEB
+            </p>
+            <span class="footer-badge">POWER BY CaaCyberr404</span>
+            <div style="margin-top: 16px;">
+                <a href="https://t.me/CaaCyberr404" style="color: var(--black); font-size: 11px; font-weight: 700; text-decoration: underline;">
+                    SALURAN WHATSAPP RESMI
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="navigate('home')">
+            <i class="ph ph-house-fill"></i>
+            <span>HOME</span>
+        </div>
+        <div class="nav-item" onclick="navigate('drama')">
+            <i class="ph ph-film-strip"></i>
+            <span>DRAMA</span>
+        </div>
+        <div class="nav-item" onclick="navigate('trending')">
+            <i class="ph ph-trend-up"></i>
+            <span>TRENDING</span>
+        </div>
+        <div class="nav-item" onclick="navigate('history')">
+            <i class="ph ph-clock-counter-clockwise"></i>
+            <span>HISTORY</span>
+        </div>
+        <div class="nav-item" onclick="navigate('profile')">
+            <i class="ph ph-user-circle"></i>
+            <span>PROFILE</span>
+        </div>
+    </nav>
+
+    <script>
+        // FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyA24TkIzQAEXB_umg4ILguyykFpGK7FSc",
+            authDomain: "project-chat-bot-ai.firebaseapp.com",
+            projectId: "project-chat-bot-ai",
+            storageBucket: "project-chat-bot-ai.firebasestorage.app",
+            messagingSenderId: "74561829228",
+            appId: "1:74561829228:web:32c62292e90b543a27db49"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let currentSource = 'starshort';
+        let terminalLines = [];
+
+        // CLOCK
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+        }, 1000);
+
+        // TERMINAL TYPEWRITER
+        function addTerminal(text, color = 'green') {
+            const terminal = document.getElementById('terminal');
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = `<span class="terminal-${color}">></span> ${text}`;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // SIDEBAR
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sb.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // NAVIGATION
+        function navigate(page) {
+            addTerminal(`Navigating to ${page}...`, 'cyan');
+            // Implement actual navigation here
+        }
+
+        // STEP NAVIGATION
+        function setStep(index) {
+            document.querySelectorAll('.step').forEach((step, i) => {
+                step.classList.toggle('active', i === index);
+            });
+        }
+
+        // LOAD DRAMA
+        async function loadDrama() {
+            currentSource = document.getElementById('api-source').value;
+            const grid = document.getElementById('drama-grid');
+            
+            addTerminal(`Connecting to ${currentSource.toUpperCase()} API...`, 'cyan');
+            grid.innerHTML = '<div class="drama-card brutal-border" style="background: var(--gray); display: flex; align-items: center; justify-content: center; padding: 40px;"><span style="color: #666; font-size: 12px;">Loading...</span></div>';
+
+            try {
+                // Proxy melalui backend Flask
+                const url = `https://api.saipulanuar.eu.org/api/drama/trending?source=${currentSource}`;
+                const res = await fetch(`/api/proxy?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                
+                const dramas = data.data || data.result || [];
+                
+                if(dramas.length === 0) throw new Error('No data');
+
+                grid.innerHTML = '';
+                dramas.slice(0, 6).forEach(drama => {
+                    const title = drama.title || drama.name || 'Unknown';
+                    const thumb = drama.thumbnail || drama.cover || 'https://via.placeholder.com/300x400';
+                    const id = drama.id;
+
+                    grid.innerHTML += `
+                        <div class="drama-card brutal-border" onclick="openDrama('${id}', '${title}')">
+                            <img src="${thumb}" alt="${title}">
+                            <div class="drama-card-content">
+                                <h3>${title}</h3>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                addTerminal(`Loaded ${dramas.length} dramas from ${currentSource}`, 'white');
+            } catch(e) {
+                grid.innerHTML = '<div class="drama-card brutal-border" style="background: var(--gray); display: flex; align-items: center; justify-content: center; padding: 40px;"><span style="color: red; font-size: 12px;">Error loading data</span></div>';
+                addTerminal('Error: Failed to load drama', 'cyan');
+            }
+        }
+
+        function openDrama(id, title) {
+            addTerminal(`Opening: ${title}`, 'cyan');
+            alert(`Player akan dibuka untuk: ${title}\nID: ${id}`);
+        }
+
+        function openTools() {
+            addTerminal('Opening TOOLS module...', 'cyan');
+            alert('Tools popup akan muncul di sini (implementasi terpisah)');
+        }
+
+        // Initial load
+        addTerminal('DRAMA NEXUS v1.0 initialized', 'green');
+        addTerminal('Ready to stream...', 'white');
+    </script>
+</body>
+</html>
