@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DRAMA NEXUS</title>
+    <title>CAA X NEXUS</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -11,485 +11,95 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
         
         :root {
-            --bg: #ECECEC;
-            --yellow: #F7D32C;
-            --green: #A8F000;
-            --cyan: #49D8F5;
-            --black: #000000;
-            --white: #FFFFFF;
-            --gray: #D1D1D1;
+            --bg: #ECECEC; --yellow: #F7D32C; --green: #A8F000; --cyan: #49D8F5;
+            --black: #000000; --white: #FFFFFF; --gray: #D1D1D1; --red: #ff4444;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg); color: var(--black); font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.5; overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
         
-        body {
-            background-color: var(--bg);
-            color: var(--black);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
-        
-        /* UTILITY CLASSES */
+        /* BRUTALIST UTILS */
         .uppercase { text-transform: uppercase; }
         .font-bold { font-weight: 800; }
-        .hidden { display: none; }
-        
-        /* BRUTALIST BORDER & SHADOW */
-        .brutal-border {
-            border: 4px solid var(--black);
-            box-shadow: 8px 8px 0px var(--black);
-            transition: all 0.18s ease;
-        }
-        
-        .brutal-border:hover {
-            transform: translateY(-3px);
-            box-shadow: 11px 11px 0px var(--black);
-        }
-        
-        .brutal-btn {
-            background: var(--green);
-            border: 3px solid var(--black);
-            box-shadow: 4px 4px 0px var(--black);
-            padding: 12px 20px;
-            font-family: inherit;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.1s;
-        }
-        
-        .brutal-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px var(--black);
-        }
-        
-        .brutal-input {
-            background: var(--gray);
-            border: 3px solid var(--black);
-            padding: 12px;
-            font-family: inherit;
-            font-weight: 700;
-            width: 100%;
-        }
-        
-        .brutal-input:focus {
-            outline: none;
-            background: var(--white);
-        }
-        
+        .hidden { display: none !important; }
+        .brutal-border { border: 4px solid var(--black); box-shadow: 8px 8px 0px var(--black); transition: all 0.18s ease; }
+        .brutal-border:hover { transform: translateY(-3px); box-shadow: 11px 11px 0px var(--black); }
+        .brutal-btn { background: var(--green); border: 3px solid var(--black); box-shadow: 4px 4px 0px var(--black); padding: 12px 20px; font-family: inherit; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: all 0.1s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--black); }
+        .brutal-input { background: var(--gray); border: 3px solid var(--black); padding: 12px; font-family: inherit; font-weight: 700; width: 100%; outline: none; }
+        .brutal-input:focus { background: var(--white); }
+
         /* HEADER */
-        header {
-            background: var(--black);
-            color: var(--white);
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 4px solid var(--black);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        
-        .menu-btn {
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--green);
-        }
-        
-        .app-title {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            text-transform: uppercase;
-        }
-        
-        .clock {
-            font-size: 12px;
-            color: var(--green);
-            font-weight: 700;
-        }
-        
-        /* HERO SECTION */
-        .hero {
-            background: var(--yellow);
-            padding: 24px;
-            margin: 24px;
-            border: 4px solid var(--black);
-            box-shadow: 8px 8px 0px var(--black);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .hero-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--black);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        
-        .hero-icon i {
-            font-size: 32px;
-            color: var(--green);
-        }
-        
-        .hero-content h1 {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 4px;
-        }
-        
-        .badge {
-            display: inline-block;
-            background: var(--cyan);
-            border: 2px solid var(--black);
-            padding: 2px 8px;
-            font-size: 10px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-        
-        .hero-subtitle {
-            font-size: 11px;
-            color: #333;
-        }
-        
+        header { background: var(--black); color: var(--white); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 4px solid var(--black); position: sticky; top: 0; z-index: 50; flex-shrink: 0; }
+        .menu-btn { font-size: 24px; cursor: pointer; color: var(--green); }
+        .app-title { font-size: 18px; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; text-align: center; flex: 1; }
+        .clock { font-size: 12px; color: var(--green); font-weight: 700; min-width: 50px; text-align: right; }
+
         /* MAIN CONTAINER */
-        .container {
-            max-width: 100%;
-            padding: 0 24px 80px 24px;
-        }
+        .container { flex: 1; overflow-y: auto; padding: 0 24px 80px 24px; }
         
-        /* CARDS */
-        .card {
-            background: var(--yellow);
-            border: 4px solid var(--black);
-            box-shadow: 8px 8px 0px var(--black);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-        
-        .card-label {
-            background: var(--black);
-            color: var(--white);
-            display: inline-block;
-            padding: 4px 8px;
-            font-size: 10px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-        
-        .card-title {
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        
-        .card-text {
-            font-size: 12px;
-            color: #333;
-            margin-bottom: 16px;
-        }
-        
-        /* DRAMA GRID */
-        .drama-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-top: 16px;
-        }
-        
-        .drama-card {
-            background: var(--gray);
-            border: 3px solid var(--black);
-            cursor: pointer;
-            transition: all 0.18s;
-        }
-        
-        .drama-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 6px 6px 0px var(--black);
-        }
-        
-        .drama-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-bottom: 3px solid var(--black);
-        }
-        
-        .drama-card-content {
-            padding: 12px;
-        }
-        
-        .drama-card h3 {
-            font-size: 11px;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-        
-        /* TERMINAL */
-        .terminal {
-            background: var(--black);
-            border: 4px solid var(--black);
-            box-shadow: 8px 8px 0px var(--black);
-            margin-bottom: 24px;
-        }
-        
-        .terminal-header {
-            background: #1a1a1a;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid #333;
-        }
-        
-        .terminal-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .terminal-dot.red { background: #ff5f56; }
-        .terminal-dot.yellow { background: #ffbd2e; }
-        .terminal-dot.green { background: #27c93f; }
-        
-        .terminal-filename {
-            color: #888;
-            font-size: 11px;
-            margin-left: 8px;
-        }
-        
-        .terminal-body {
-            padding: 16px;
-            color: var(--green);
-            font-size: 11px;
-            min-height: 100px;
-        }
-        
-        .terminal-line {
-            margin-bottom: 4px;
-        }
-        
-        .terminal-cyan { color: var(--cyan); }
-        .terminal-white { color: var(--white); }
-        
-        /* STEP NAVIGATION */
-        .step-nav {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-        
-        .step {
-            flex: 1;
-            background: var(--white);
-            border: 3px solid var(--black);
-            padding: 12px;
-            text-align: center;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        
-        .step.active {
-            background: var(--black);
-            color: var(--white);
-            border-bottom: 4px solid var(--yellow);
-        }
-        
+        /* HERO */
+        .hero { background: var(--yellow); padding: 24px; margin: 24px 0; border: 4px solid var(--black); box-shadow: 8px 8px 0px var(--black); display: flex; align-items: center; gap: 16px; }
+        .hero-icon { width: 60px; height: 60px; background: var(--black); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .hero-icon i { font-size: 32px; color: var(--green); }
+        .badge { display: inline-block; background: var(--cyan); border: 2px solid var(--black); padding: 2px 8px; font-size: 10px; font-weight: 800; margin-bottom: 8px; }
+
+        /* GRIDS */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+        .card { background: var(--gray); border: 3px solid var(--black); cursor: pointer; transition: all 0.18s; overflow: hidden; }
+        .card:hover { transform: translateY(-3px); box-shadow: 6px 6px 0px var(--black); }
+        .card img { width: 100%; height: 150px; object-fit: cover; border-bottom: 3px solid var(--black); }
+        .card-content { padding: 12px; }
+        .card h3 { font-size: 11px; font-weight: 700; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card p { font-size: 10px; color: #555; margin-top: 4px; }
+
         /* BOTTOM NAV */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--black);
-            border-top: 4px solid var(--black);
-            display: flex;
-            z-index: 50;
-        }
-        
-        .nav-item {
-            flex: 1;
-            padding: 12px 0;
-            text-align: center;
-            color: #666;
-            cursor: pointer;
-            border-right: 2px solid #333;
-            transition: all 0.18s;
-        }
-        
-        .nav-item:last-child {
-            border-right: none;
-        }
-        
-        .nav-item:hover, .nav-item.active {
-            color: var(--green);
-            background: #111;
-        }
-        
-        .nav-item i {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        
-        .nav-item span {
-            font-size: 9px;
-            font-weight: 700;
-        }
-        
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--black); border-top: 4px solid var(--black); display: flex; z-index: 50; flex-shrink: 0; }
+        .nav-item { flex: 1; padding: 12px 0; text-align: center; color: #666; cursor: pointer; border-right: 2px solid #333; transition: all 0.18s; }
+        .nav-item:last-child { border-right: none; }
+        .nav-item.active { color: var(--green); background: #111; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-item span { font-size: 9px; font-weight: 700; }
+
         /* SIDEBAR */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            background: var(--bg);
-            border-right: 4px solid var(--black);
-            z-index: 100;
-            transition: left 0.3s;
-            overflow-y: auto;
-        }
+        .sidebar { position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px; height: 100%; background: var(--bg); border-right: 4px solid var(--black); z-index: 100; transition: left 0.3s; overflow-y: auto; }
+        .sidebar.open { left: 0; }
+        .sidebar-header { background: var(--yellow); border-bottom: 4px solid var(--black); padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-menu { padding: 16px; }
+        .sidebar-item { padding: 12px; margin-bottom: 8px; background: var(--gray); border: 3px solid var(--black); cursor: pointer; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 12px; }
+        .sidebar-item:hover { background: var(--white); transform: translateX(4px); }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 90; display: none; }
+        .overlay.show { display: block; }
+
+        /* === PLAYER VIEW (MUSIC & DRAMA) === */
+        #view-player { position: fixed; inset: 0; background: var(--black); z-index: 200; display: none; flex-direction: column; }
+        #view-player.active { display: flex; }
+        .player-close { position: absolute; top: 20px; left: 20px; z-index: 210; background: var(--black); border: 2px solid var(--white); color: var(--white); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .player-quote { background: var(--yellow); border: 3px solid var(--black); padding: 15px; margin: 70px 20px 20px 20px; font-style: italic; font-size: 12px; color: var(--black); box-shadow: 4px 4px 0 var(--black); }
+        .media-container { width: 100%; aspect-ratio: 16/9; background: #000; flex-shrink: 0; position: relative; }
+        video, audio { width: 100%; height: 100%; object-fit: contain; }
+        .player-controls { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--gray); border-bottom: 3px solid var(--black); flex-shrink: 0; }
+        .control-btn { background: var(--black); color: var(--white); border: none; padding: 8px 15px; font-weight: bold; cursor: pointer; font-family: inherit; }
+        .up-next { padding: 20px; flex: 1; overflow-y: auto; background: var(--bg); }
         
-        .sidebar.open {
-            left: 0;
-        }
-        
-        .sidebar-header {
-            background: var(--yellow);
-            border-bottom: 4px solid var(--black);
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .sidebar-close {
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--black);
-        }
-        
-        .sidebar-menu {
-            padding: 16px;
-        }
-        
-        .sidebar-item {
-            padding: 12px;
-            margin-bottom: 8px;
-            background: var(--gray);
-            border: 3px solid var(--black);
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .sidebar-item:hover {
-            background: var(--white);
-            transform: translateX(4px);
-        }
-        
-        /* OVERLAY */
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 90;
-            display: none;
-        }
-        
-        .overlay.show {
-            display: block;
-        }
-        
-        /* BANNER */
-        .banner {
-            background: var(--black);
-            color: var(--green);
-            padding: 16px 24px;
-            text-align: center;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 11px;
-            text-shadow: 0 0 10px var(--green);
-            margin-top: 24px;
-            border: 4px solid var(--black);
-        }
-        
-        /* FOOTER */
-        footer {
-            background: var(--bg);
-            padding: 24px;
-            border-top: 4px solid var(--black);
-            text-align: center;
-        }
-        
-        .footer-badge {
-            background: var(--yellow);
-            border: 3px solid var(--black);
-            display: inline-block;
-            padding: 4px 12px;
-            font-size: 10px;
-            font-weight: 800;
-            margin-top: 8px;
-        }
-        
-        /* ANIMATIONS */
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        
-        .blink {
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        
-        .typing-effect {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 2px solid var(--green);
-            animation: typing 2s steps(30, end);
-        }
+        /* === TOOLS POPUP (RETRO) === */
+        #tools-popup { position: fixed; inset: 0; background: var(--bg); z-index: 300; display: none; flex-direction: column; }
+        #tools-popup.active { display: flex; }
+        .tools-header { background: var(--yellow); border-bottom: 4px solid var(--black); padding: 16px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .tools-content { flex: 1; overflow-y: auto; padding: 24px; }
+        .tool-card { background: var(--white); border: 4px solid var(--black); box-shadow: 8px 8px 0 var(--black); padding: 20px; margin-bottom: 24px; }
+        .tool-result { margin-top: 15px; padding: 10px; background: var(--black); color: var(--green); font-size: 11px; border: 2px solid var(--black); min-height: 50px; word-break: break-all; }
+        .tool-result img { max-width: 100%; border: 2px solid var(--white); margin-top: 10px; }
+
+        /* SEARCH BAR */
+        .search-container { display: flex; gap: 10px; margin-bottom: 20px; }
         
         /* RESPONSIVE */
         @media (max-width: 480px) {
-            .hero {
-                margin: 16px;
-                padding: 16px;
-            }
-            
-            .container {
-                padding: 0 16px 80px 16px;
-            }
-            
-            .drama-grid {
-                gap: 12px;
-            }
+            .container { padding: 0 16px 80px 16px; }
+            .hero { margin: 16px 0; padding: 16px; }
+            .grid-2 { gap: 12px; }
+            .card img { height: 120px; }
         }
     </style>
 </head>
@@ -497,10 +107,8 @@
 
     <!-- HEADER -->
     <header>
-        <div class="menu-btn" onclick="toggleSidebar()">
-            <i class="ph ph-list"></i>
-        </div>
-        <h1 class="app-title">DRAMA NEXUS</h1>
+        <div class="menu-btn" onclick="toggleSidebar()"><i class="ph ph-list"></i></div>
+        <h1 class="app-title">CAA X NEXUS</h1>
         <div class="clock" id="clock">00:00</div>
     </header>
 
@@ -509,150 +117,112 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span class="font-bold uppercase">Menu Utama</span>
-            <div class="sidebar-close" onclick="toggleSidebar()">
-                <i class="ph ph-x"></i>
-            </div>
+            <div onclick="toggleSidebar()" style="cursor:pointer"><i class="ph ph-x"></i></div>
         </div>
         <div class="sidebar-menu">
-            <div class="sidebar-item" onclick="navigate('home'); toggleSidebar()">
-                <i class="ph ph-house"></i> HOME
-            </div>
-            <div class="sidebar-item" onclick="alert('API: ' + currentSource); toggleSidebar()">
-                <i class="ph ph-cloud"></i> API SERVICE
-            </div>
-            <div class="sidebar-item" onclick="window.open('https://t.me/CaaCyberr404')">
-                <i class="ph ph-telegram-logo"></i> DEVELOPER
-            </div>
-            <div class="sidebar-item" onclick="window.open('https://t.me/caaxratdev')">
-                <i class="ph ph-users"></i> CHANEL DEV
-            </div>
-            <div class="sidebar-item" onclick="openTools(); toggleSidebar()">
-                <i class="ph ph-wrench"></i> TOOLS
-            </div>
-            <div class="sidebar-item" onclick="alert('History dari Firebase'); toggleSidebar()">
-                <i class="ph ph-clock-counter-clockwise"></i> HISTORY
-            </div>
-            <div class="sidebar-item" onclick="alert('Settings'); toggleSidebar()">
-                <i class="ph ph-gear"></i> SETTING
-            </div>
+            <div class="sidebar-item" onclick="switchTab('home'); toggleSidebar()"><i class="ph ph-house"></i> HOME</div>
+            <div class="sidebar-item" onclick="openTools(); toggleSidebar()"><i class="ph ph-wrench"></i> TOOLS HACKER (11 FITUR)</div>
+            <div class="sidebar-item" onclick="window.open('https://t.me/CaaCyberr404')"><i class="ph ph-telegram-logo"></i> DEVELOPER</div>
+            <div class="sidebar-item" onclick="window.open('https://t.me/caaxratdev')"><i class="ph ph-users"></i> CHANEL DEV</div>
+            <div class="sidebar-item" onclick="alert('History dari Firebase'); toggleSidebar()"><i class="ph ph-clock-counter-clockwise"></i> HISTORY</div>
         </div>
     </div>
 
-    <!-- HERO SECTION -->
-    <div class="hero">
-        <div class="hero-icon">
-            <i class="ph ph-film-strip"></i>
-        </div>
-        <div class="hero-content">
-            <span class="badge">V1.0 STABLE</span>
-            <h1 class="uppercase">DRAMA NEXUS</h1>
-            <p class="hero-subtitle">Platform Streaming Drama Otomatis dengan Multi-Source API</p>
-        </div>
-    </div>
-
-    <!-- MAIN CONTAINER -->
+    <!-- MAIN CONTENT -->
     <div class="container">
         
-        <!-- STEP NAVIGATION -->
-        <div class="step-nav">
-            <div class="step active" onclick="setStep(0)">HOME</div>
-            <div class="step" onclick="setStep(1)">DRAMA</div>
-            <div class="step" onclick="setStep(2)">TRENDING</div>
+        <!-- TAB: HOME (MUSIC) -->
+        <div id="tab-home" class="tab-content">
+            <div class="hero">
+                <div class="hero-icon"><i class="ph ph-music-notes"></i></div>
+                <div>
+                    <span class="badge">MUSIC MODE</span>
+                    <h1 class="uppercase font-bold">INVIDIOUS STREAM</h1>
+                    <p style="font-size: 11px;">Koleksi Lagu Indonesia & Viral Lengkap</p>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="music-search" class="brutal-input" placeholder="Cari lagu (DJ, Pop, Viral)...">
+                <button class="brutal-btn" style="width: auto;" onclick="searchMusic()"><i class="ph ph-magnifying-glass"></i></button>
+            </div>
+
+            <h3 class="uppercase font-bold" style="margin-top: 20px;">Trending Music</h3>
+            <div id="music-grid" class="grid-2">
+                <div class="card brutal-border" style="padding: 20px; text-align: center; grid-column: span 2;">Memuat lagu...</div>
+            </div>
         </div>
 
-        <!-- TERMINAL -->
-        <div class="terminal">
-            <div class="terminal-header">
-                <div class="terminal-dot red"></div>
-                <div class="terminal-dot yellow"></div>
-                <div class="terminal-dot green"></div>
-                <span class="terminal-filename">nexus_terminal.log</span>
-                <span style="margin-left: auto; font-size: 10px; color: #666;">2 LINES</span>
-            </div>
-            <div class="terminal-body" id="terminal">
-                <div class="terminal-line"><span class="terminal-cyan">></span> System initialized...</div>
-                <div class="terminal-line"><span class="terminal-cyan">></span> Waiting for user input...</div>
-            </div>
-        </div>
-
-        <!-- MAIN CARD -->
-        <div class="card">
-            <span class="card-label">STEP 01</span>
-            <h2 class="card-title">PILIH SUMBER API DRAMA</h2>
-            <p class="card-text">
-                Sistem mendukung multiple API sources. Jika satu source down, 
-                Anda dapat berpindah ke source lain dengan mudah.
-            </p>
-            
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-                <span class="badge" style="background: var(--yellow);">StarShort</span>
-                <span class="badge" style="background: var(--cyan);">StardustTV</span>
-                <span class="badge" style="background: var(--green);">DramaBox</span>
+        <!-- TAB: DRAMA -->
+        <div id="tab-drama" class="tab-content hidden">
+            <div class="hero" style="background: var(--cyan);">
+                <div class="hero-icon"><i class="ph ph-film-strip"></i></div>
+                <div>
+                    <span class="badge" style="background: var(--white);">DRAMA MODE</span>
+                    <h1 class="uppercase font-bold">DRAMA NEXUS</h1>
+                    <p style="font-size: 11px;">StarShort • StardustTV • DramaBox</p>
+                </div>
             </div>
 
-            <select id="api-source" onchange="loadDrama()" class="brutal-input" style="margin-bottom: 16px;">
+            <select id="drama-source" onchange="loadDrama()" class="brutal-input" style="margin-bottom: 16px;">
                 <option value="starshort">STARSHORT (Primary)</option>
                 <option value="stardusttv">STARDUSTTV (Backup 1)</option>
                 <option value="dramabox">DRAMABOX (Backup 2)</option>
             </select>
 
-            <button class="brutal-btn" style="width: 100%;" onclick="loadDrama()">
-                <i class="ph ph-arrow-right"></i> MUAT DRAMA
-            </button>
-        </div>
+            <div class="search-container">
+                <input type="text" id="drama-search" class="brutal-input" placeholder="Cari judul drama...">
+                <button class="brutal-btn" style="width: auto;" onclick="searchDrama()"><i class="ph ph-magnifying-glass"></i></button>
+            </div>
 
-        <!-- DRAMA GRID -->
-        <div id="drama-grid" class="drama-grid">
-            <div class="drama-card brutal-border" style="background: var(--gray); display: flex; align-items: center; justify-content: center; padding: 40px;">
-                <span style="color: #666; font-size: 12px;">Memuat data...</span>
+            <div id="drama-grid" class="grid-2">
+                <div class="card brutal-border" style="padding: 20px; text-align: center; grid-column: span 2;">Pilih sumber API lalu klik Muat</div>
             </div>
         </div>
 
-        <!-- BANNER -->
-        <div class="banner">
-            SISTEM STREAMING DRAMA MULTI-SOURCE – AMAN & OTOMATIS
-        </div>
-
-        <!-- FOOTER -->
-        <footer>
-            <p style="font-size: 10px; color: #666; margin-bottom: 8px;">
-                DRAMA NEXUS – SISTEM STREAMING BERBASIS WEB
-            </p>
-            <span class="footer-badge">POWER BY CaaCyberr404</span>
-            <div style="margin-top: 16px;">
-                <a href="https://t.me/CaaCyberr404" style="color: var(--black); font-size: 11px; font-weight: 700; text-decoration: underline;">
-                    SALURAN WHATSAPP RESMI
-                </a>
-            </div>
-        </footer>
     </div>
 
     <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="navigate('home')">
-            <i class="ph ph-house-fill"></i>
-            <span>HOME</span>
-        </div>
-        <div class="nav-item" onclick="navigate('drama')">
-            <i class="ph ph-film-strip"></i>
-            <span>DRAMA</span>
-        </div>
-        <div class="nav-item" onclick="navigate('trending')">
-            <i class="ph ph-trend-up"></i>
-            <span>TRENDING</span>
-        </div>
-        <div class="nav-item" onclick="navigate('history')">
-            <i class="ph ph-clock-counter-clockwise"></i>
-            <span>HISTORY</span>
-        </div>
-        <div class="nav-item" onclick="navigate('profile')">
-            <i class="ph ph-user-circle"></i>
-            <span>PROFILE</span>
-        </div>
+        <div class="nav-item active" onclick="switchTab('home')"><i class="ph ph-music-notes-fill"></i><span>MUSIC</span></div>
+        <div class="nav-item" onclick="switchTab('drama')"><i class="ph ph-film-strip"></i><span>DRAMA</span></div>
+        <div class="nav-item" onclick="openTools()"><i class="ph ph-wrench"></i><span>TOOLS</span></div>
+        <div class="nav-item" onclick="window.open('https://t.me/CaaCyberr404')"><i class="ph ph-telegram-logo"></i><span>DEV</span></div>
     </nav>
 
+    <!-- PLAYER VIEW -->
+    <div id="view-player">
+        <div class="player-close" onclick="closePlayer()"><i class="ph ph-x"></i></div>
+        <div class="player-quote">"Nikmati setiap detik karya terbaik tanpa batas."</div>
+        <div class="media-container">
+            <video id="main-video" controls playsinline style="display:none;"></video>
+            <audio id="main-audio" controls style="display:none; width: 100%; height: 100%;"></audio>
+            <img id="player-thumb" src="" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.3;">
+        </div>
+        <div class="player-controls">
+            <button class="control-btn" onclick="closePlayer()">CLOSE</button>
+            <span id="player-title" style="font-weight: bold; color: white; flex: 1; text-align: center; padding: 0 10px;">Title</span>
+        </div>
+        <div class="up-next" id="player-info">
+            <p style="color: #666; text-align: center; margin-top: 20px;">Sedang memutar...</p>
+        </div>
+    </div>
+
+    <!-- TOOLS POPUP -->
+    <div id="tools-popup">
+        <div class="tools-header">
+            <h2 class="font-bold uppercase"><i class="ph ph-terminal-window"></i> NEXUS TOOLS</h2>
+            <button onclick="closeTools()" class="brutal-btn" style="width:auto; padding:5px 15px; background:red; color:white; border: 2px solid black;">X</button>
+        </div>
+        <div class="tools-content" id="tools-container">
+            <!-- Tools will be injected here -->
+        </div>
+    </div>
+
     <script>
-        // FIREBASE CONFIG
+        // ==========================================
+        // CONFIG & FIREBASE
+        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyA24TkIzQAEXB_umg4ILguyykFpGK7FSc",
             authDomain: "project-chat-bot-ai.firebaseapp.com",
@@ -664,100 +234,291 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        let currentSource = 'starshort';
-        let terminalLines = [];
+        // INVIDIOUS INSTANCES ROTATOR
+        const instances = [
+            'https://vid.puffyan.us',
+            'https://invidious.fdn.fr',
+            'https://inv.tux.pizza',
+            'https://invidious.projectsegfau.lt'
+        ];
+        let currentInstanceIndex = 0;
 
         // CLOCK
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-        }, 1000);
-
-        // TERMINAL TYPEWRITER
-        function addTerminal(text, color = 'green') {
-            const terminal = document.getElementById('terminal');
-            const line = document.createElement('div');
-            line.className = 'terminal-line';
-            line.innerHTML = `<span class="terminal-${color}">></span> ${text}`;
-            terminal.appendChild(line);
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-
-        // SIDEBAR
-        function toggleSidebar() {
-            const sb = document.getElementById('sidebar');
-            const overlay = document.querySelector('.overlay');
-            sb.classList.toggle('open');
-            overlay.classList.toggle('show');
-        }
+        setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}), 1000);
 
         // NAVIGATION
-        function navigate(page) {
-            addTerminal(`Navigating to ${page}...`, 'cyan');
-            // Implement actual navigation here
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.overlay').classList.toggle('show');
         }
 
-        // STEP NAVIGATION
-        function setStep(index) {
-            document.querySelectorAll('.step').forEach((step, i) => {
-                step.classList.toggle('active', i === index);
-            });
-        }
-
-        // LOAD DRAMA
-        async function loadDrama() {
-            currentSource = document.getElementById('api-source').value;
-            const grid = document.getElementById('drama-grid');
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
             
-            addTerminal(`Connecting to ${currentSource.toUpperCase()} API...`, 'cyan');
-            grid.innerHTML = '<div class="drama-card brutal-border" style="background: var(--gray); display: flex; align-items: center; justify-content: center; padding: 40px;"><span style="color: #666; font-size: 12px;">Loading...</span></div>';
+            if(tab === 'home') loadMusicTrending();
+            if(tab === 'drama') loadDrama();
+        }
 
+        // ==========================================
+        // MUSIC LOGIC (INVIDIOUS API)
+        // ==========================================
+        async function searchMusic(query = 'dj tiktok viral indonesia') {
+            const grid = document.getElementById('music-grid');
+            grid.innerHTML = '<div class="card brutal-border" style="padding:20px; grid-column:span 2; text-align:center">Searching...</div>';
+            
             try {
-                // Proxy melalui backend Flask
-                const url = `https://api.saipulanuar.eu.org/api/drama/trending?source=${currentSource}`;
-                const res = await fetch(`/api/proxy?url=${encodeURIComponent(url)}`);
+                const url = `${instances[currentInstanceIndex]}/api/v1/search?q=${encodeURIComponent(query)}&type=music_video`;
+                const res = await fetch(url);
+                if(!res.ok) throw new Error("Instance Error");
                 const data = await res.json();
                 
-                const dramas = data.data || data.result || [];
-                
-                if(dramas.length === 0) throw new Error('No data');
-
                 grid.innerHTML = '';
-                dramas.slice(0, 6).forEach(drama => {
-                    const title = drama.title || drama.name || 'Unknown';
-                    const thumb = drama.thumbnail || drama.cover || 'https://via.placeholder.com/300x400';
-                    const id = drama.id;
-
+                data.slice(0, 10).forEach(item => {
                     grid.innerHTML += `
-                        <div class="drama-card brutal-border" onclick="openDrama('${id}', '${title}')">
-                            <img src="${thumb}" alt="${title}">
-                            <div class="drama-card-content">
-                                <h3>${title}</h3>
+                        <div class="card brutal-border" onclick="playMusic('${item.videoId}', '${item.title.replace(/'/g, "\\'")}', '${item.author}')">
+                            <img src="${item.videoThumbnails[0].url}" onerror="this.src='https://via.placeholder.com/300'">
+                            <div class="card-content">
+                                <h3>${item.title}</h3>
+                                <p>${item.author}</p>
                             </div>
                         </div>
                     `;
                 });
-                
-                addTerminal(`Loaded ${dramas.length} dramas from ${currentSource}`, 'white');
             } catch(e) {
-                grid.innerHTML = '<div class="drama-card brutal-border" style="background: var(--gray); display: flex; align-items: center; justify-content: center; padding: 40px;"><span style="color: red; font-size: 12px;">Error loading data</span></div>';
-                addTerminal('Error: Failed to load drama', 'cyan');
+                currentInstanceIndex = (currentInstanceIndex + 1) % instances.length;
+                grid.innerHTML = '<div class="card brutal-border" style="padding:20px; grid-column:span 2; text-align:center; color:red">Server Sibuk. Mencoba server lain...</div>';
+                setTimeout(() => searchMusic(query), 1000);
             }
         }
 
-        function openDrama(id, title) {
-            addTerminal(`Opening: ${title}`, 'cyan');
-            alert(`Player akan dibuka untuk: ${title}\nID: ${id}`);
+        async function playMusic(id, title, artist) {
+            document.getElementById('view-player').classList.add('active');
+            document.getElementById('player-title').innerText = title;
+            document.getElementById('main-video').style.display = 'none';
+            document.getElementById('main-audio').style.display = 'block';
+            document.getElementById('player-thumb').style.display = 'block';
+            document.getElementById('player-thumb').src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+            
+            // Save to Firebase History
+            db.collection('history').add({ type: 'music', title: title, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+
+            try {
+                const res = await fetch(`${instances[currentInstanceIndex]}/api/v1/videos/${id}`);
+                const data = await res.json();
+                const audioFormat = data.adaptiveFormats.find(f => f.mimeType.includes('audio/mp4'));
+                
+                if(audioFormat) {
+                    document.getElementById('main-audio').src = audioFormat.url;
+                    document.getElementById('main-audio').play();
+                } else {
+                    alert("Audio format not found on this instance.");
+                }
+            } catch(e) { alert("Error loading audio stream."); }
         }
 
+        function loadMusicTrending() { searchMusic('top hits indonesia 2024'); }
+
+        // ==========================================
+        // DRAMA LOGIC (YOUR APIs)
+        // ==========================================
+        let currentDramaSource = 'starshort';
+
+        async function loadDrama(query = '') {
+            currentDramaSource = document.getElementById('drama-source').value;
+            const grid = document.getElementById('drama-grid');
+            grid.innerHTML = '<div class="card brutal-border" style="padding:20px; grid-column:span 2; text-align:center">Loading API...</div>';
+
+            let apiUrl = `https://api.saipulanuar.eu.org/api/drama/trending?source=${currentDramaSource}`;
+            if(query) apiUrl = `https://api.saipulanuar.eu.org/api/drama/search?source=${currentDramaSource}&q=${encodeURIComponent(query)}`;
+
+            try {
+                const res = await fetch(apiUrl);
+                const data = await res.json();
+                const dramas = data.data || data.result || [];
+                
+                grid.innerHTML = '';
+                if(dramas.length === 0) grid.innerHTML = '<div style="grid-column:span 2; text-align:center">Tidak ada hasil.</div>';
+
+                dramas.forEach(d => {
+                    const id = d.id;
+                    const title = d.title || d.name;
+                    const thumb = d.thumbnail || d.cover;
+                    
+                    grid.innerHTML += `
+                        <div class="card brutal-border" onclick="playDrama('${id}', '${title.replace(/'/g, "\\'")}')">
+                            <img src="${thumb}" onerror="this.src='https://via.placeholder.com/300'">
+                            <div class="card-content">
+                                <h3>${title}</h3>
+                                <p>${currentDramaSource}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                grid.innerHTML = '<div class="card brutal-border" style="padding:20px; grid-column:span 2; text-align:center; color:red">API Error. Coba ganti sumber.</div>';
+            }
+        }
+
+        function searchDrama() {
+            const q = document.getElementById('drama-search').value;
+            if(q) loadDrama(q);
+        }
+
+        async function playDrama(id, title) {
+            document.getElementById('view-player').classList.add('active');
+            document.getElementById('player-title').innerText = title;
+            document.getElementById('main-audio').style.display = 'none';
+            document.getElementById('main-video').style.display = 'block';
+            document.getElementById('player-thumb').style.display = 'none';
+
+            // Save to Firebase History
+            db.collection('history').add({ type: 'drama', title: title, source: currentDramaSource, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+
+            try {
+                const res = await fetch(`https://api.saipulanuar.eu.org/api/drama/episode?source=${currentDramaSource}&id=${id}&ep=1`);
+                const data = await res.json();
+                const videoUrl = data.data?.videoUrl || data.result?.url || "";
+                
+                if(videoUrl) {
+                    document.getElementById('main-video').src = videoUrl;
+                    document.getElementById('main-video').play();
+                } else {
+                    alert("Video URL not found.");
+                }
+            } catch(e) { alert("Failed to load episode."); }
+        }
+
+        function closePlayer() {
+            document.getElementById('view-player').classList.remove('active');
+            document.getElementById('main-video').pause();
+            document.getElementById('main-audio').pause();
+        }
+
+        // ==========================================
+        // TOOLS LOGIC (11 FEATURES)
+        // ==========================================
         function openTools() {
-            addTerminal('Opening TOOLS module...', 'cyan');
-            alert('Tools popup akan muncul di sini (implementasi terpisah)');
+            document.getElementById('tools-popup').classList.add('active');
+            renderToolMenu();
+        }
+        function closeTools() { document.getElementById('tools-popup').classList.remove('active'); }
+
+        function renderToolMenu() {
+            const container = document.getElementById('tools-container');
+            container.innerHTML = `
+                <div class="grid-2">
+                    <div class="card brutal-border" onclick="renderTool('cuaca')" style="padding:15px; text-align:center;"><i class="ph ph-cloud-sun" style="font-size:24px"></i><br>Cuaca</div>
+                    <div class="card brutal-border" onclick="renderTool('tiktok')" style="padding:15px; text-align:center;"><i class="ph ph-tiktok-logo" style="font-size:24px"></i><br>TikTok DL</div>
+                    <div class="card brutal-border" onclick="renderTool('instagram')" style="padding:15px; text-align:center;"><i class="ph ph-instagram-logo" style="font-size:24px"></i><br>IG DL</div>
+                    <div class="card brutal-border" onclick="renderTool('leave')" style="padding:15px; text-align:center;"><i class="ph ph-canvas" style="font-size:24px"></i><br>Leave V1</div>
+                    <div class="card brutal-border" onclick="renderTool('welcome')" style="padding:15px; text-align:center;"><i class="ph ph-hand-waving" style="font-size:24px"></i><br>Welcome V1</div>
+                    <div class="card brutal-border" onclick="renderTool('upload')" style="padding:15px; text-align:center;"><i class="ph ph-upload-simple" style="font-size:24px"></i><br>Upload V3</div>
+                    <div class="card brutal-border" onclick="renderTool('paptt')" style="padding:15px; text-align:center;"><i class="ph ph-camera" style="font-size:24px"></i><br>Pap TT</div>
+                    <div class="card brutal-border" onclick="renderTool('ephoto')" style="padding:15px; text-align:center;"><i class="ph ph-paint-brush" style="font-size:24px"></i><br>Ephoto V4</div>
+                    <div class="card brutal-border" onclick="renderTool('cecan_multi')" style="padding:15px; text-align:center;"><i class="ph ph-image" style="font-size:24px"></i><br>Cecan Multi</div>
+                    <div class="card brutal-border" onclick="renderTool('stalk_tiktok')" style="padding:15px; text-align:center;"><i class="ph ph-user" style="font-size:24px"></i><br>Stalk TT</div>
+                </div>
+            `;
         }
 
-        // Initial load
-        addTerminal('DRAMA NEXUS v1.0 initialized', 'green');
-        addTerminal('Ready to stream...', 'white');
+        function renderTool(type) {
+            const c = document.getElementById('tools-container');
+            let html = `<button class="brutal-btn" style="margin-bottom:20px; background:#ccc;" onclick="renderToolMenu()"><i class="ph ph-arrow-left"></i> KEMBALI</button>`;
+            
+            if(type === 'cuaca') {
+                html += `<div class="tool-card"><h3>Cuaca Real-time</h3><input id="t_loc" class="brutal-input" placeholder="Kota (ex: Jakarta)"><button class="brutal-btn" style="margin-top:10px" onclick="execTool('cuaca')">CARI</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'tiktok') {
+                html += `<div class="tool-card"><h3>TikTok Downloader</h3><input id="t_url" class="brutal-input" placeholder="URL TikTok"><button class="brutal-btn" style="margin-top:10px" onclick="execTool('tiktok')">DOWNLOAD</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'instagram') {
+                html += `<div class="tool-card"><h3>Instagram Downloader</h3><input id="t_url" class="brutal-input" placeholder="URL Instagram"><button class="brutal-btn" style="margin-top:10px" onclick="execTool('instagram')">DOWNLOAD</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'leave') {
+                html += `<div class="tool-card"><h3>Leave Canvas V1</h3><input id="t_name" class="brutal-input" placeholder="Nama"><input id="t_av" class="brutal-input" style="margin-top:5px" placeholder="URL Avatar"><button class="brutal-btn" style="margin-top:10px" onclick="execTool('leave')">GENERATE</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'welcome') {
+                html += `<div class="tool-card"><h3>Welcome V1</h3><input id="t_name" class="brutal-input" placeholder="Nama User"><button class="brutal-btn" style="margin-top:10px" onclick="execTool('welcome')">GENERATE</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'upload') {
+                html += `<div class="tool-card"><h3>Upload V3 (Link Only)</h3><p style="font-size:10px; margin-bottom:5px">Masukkan URL Gambar/Video langsung:</p><input id="t_url" class="brutal-input" placeholder="https://..."><button class="brutal-btn" style="margin-top:10px" onclick="execTool('upload')">PROSES</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'paptt') {
+                html += `<div class="tool-card"><h3>Pap TT Random</h3><button class="brutal-btn" onclick="execTool('paptt')">NEXT PHOTO</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'ephoto') {
+                html += `<div class="tool-card"><h3>Ephoto V4</h3><input id="t_url" class="brutal-input" placeholder="URL Ephoto (jpg)"><input id="t_text" class="brutal-input" style="margin-top:5px" placeholder="Teks Custom"><button class="brutal-btn" style="margin-top:10px" onclick="execTool('ephoto')">GENERATE</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'cecan_multi') {
+                html += `<div class="tool-card"><h3>Cecan Multi Country</h3><select id="t_country" class="brutal-input"><option value="indonesia">Indonesia</option><option value="vietnam">Vietnam</option><option value="thailand">Thailand</option><option value="malaysia">Malaysia</option><option value="china">China</option><option value="korea">Korea</option><option value="japan">Jepang</option></select><button class="brutal-btn" style="margin-top:10px" onclick="execTool('cecan_multi')">GENERATE</button><div id="t_res" class="tool-result"></div></div>`;
+            } else if(type === 'stalk_tiktok') {
+                html += `<div class="tool-card"><h3>Stalk TikTok</h3><input id="t_user" class="brutal-input" placeholder="Username"><button class="brutal-btn" style="margin-top:10px" onclick="execTool('stalk_tiktok')">STALK</button><div id="t_res" class="tool-result"></div></div>`;
+            }
+            
+            c.innerHTML = html;
+        }
+
+        async function execTool(type) {
+            const resDiv = document.getElementById('t_res');
+            resDiv.innerHTML = 'Processing...';
+            let url = '';
+
+            try {
+                if(type === 'cuaca') {
+                    const loc = document.getElementById('t_loc').value;
+                    const r = await fetch(`https://api.siputzx.my.id/api/info/cuaca?location=${loc}`);
+                    const d = await r.json();
+                    resDiv.innerHTML = `Kota: ${d.data.kota}<br>Suhu: ${d.data.suhu}°C<br>Cuaca: ${d.data.cuaca}`;
+                } 
+                else if(type === 'tiktok') {
+                    const u = document.getElementById('t_url').value;
+                    const r = await fetch(`https://api.saipulanuar.eu.org/api/download/ttdl?url=${u}`);
+                    const d = await r.json();
+                    resDiv.innerHTML = `<a href="${d.result.video}" target="_blank" class="brutal-btn" style="margin-top:5px; background:cyan">DOWNLOAD MP4</a>`;
+                }
+                else if(type === 'instagram') {
+                    const u = document.getElementById('t_url').value;
+                    const r = await fetch(`https://api.saipulanuar.eu.org/api/download/igdl?url=${u}`);
+                    const d = await r.json();
+                    resDiv.innerHTML = `<a href="${d.result[0].url}" target="_blank" class="brutal-btn" style="margin-top:5px; background:cyan">DOWNLOAD MEDIA</a>`;
+                }
+                else if(type === 'leave') {
+                    const n = document.getElementById('t_name').value;
+                    const av = document.getElementById('t_av').value || 'https://i.pinimg.com/736x/46/11/3e/46113e4792f02dd2e1d15a6fc5d074b3.jpg';
+                    const bg = 'https://get.pxhere.com/photo/landscape-tree-water-nature-forest-wilderness-mountain-cloud-sky-meadow-lake-river-valley-mountain-range-country-solitude-rural-reflection-scenic-autumn-park-national-park-body-of-water-trees-outdoors-woods-hdr-clouds-colorado-alps-reflections-beautiful-habitat-idyll-ecosystem-lake-irene-natural-environment-atmospheric-phenomenon-woody-plant-mountainous-landforms-computer-wallpaper-489996.jpg';
+                    resDiv.innerHTML = `<img src="https://api.saipulanuar.eu.org/api/canvas/leave1?name=${n}&avatar=${av}&background=${bg}">`;
+                }
+                else if(type === 'welcome') {
+                    const n = document.getElementById('t_name').value;
+                    resDiv.innerHTML = `<img src="https://api.siputzx.my.id/api/canvas/welcomev1?name=${n}">`;
+                }
+                else if(type === 'upload') {
+                    const u = document.getElementById('t_url').value;
+                    // Simulasi upload karena butuh form-data multipart yang rumit di frontend murni
+                    resDiv.innerHTML = `Link Anda: <a href="${u}" target="_blank">${u}</a><br>(Fitur upload file fisik memerlukan backend)`;
+                }
+                else if(type === 'paptt') {
+                    const r = await fetch(`https://api.kyzznekoo.my.id/api/asupan/paptt`);
+                    const d = await r.json();
+                    resDiv.innerHTML = `<img src="${d.result.url}">`;
+                }
+                else if(type === 'ephoto') {
+                    const u = document.getElementById('t_url').value;
+                    const t = document.getElementById('t_text').value;
+                    resDiv.innerHTML = `<img src="https://api.siputzx.my.id/api/m/ephoto360?url=${u}&text=${t}">`;
+                }
+                else if(type === 'cecan_multi') {
+                    const co = document.getElementById('t_country').value;
+                    const r = await fetch(`https://api.siputzx.my.id/api/r/cecan/${co}`);
+                    const d = await r.json();
+                    resDiv.innerHTML = `<img src="${d.result}">`;
+                }
+                else if(type === 'stalk_tiktok') {
+                    const u = document.getElementById('t_user').value;
+                    const r = await fetch(`https://api.saipulanuar.eu.org/api/stalk/tiktok?username=${u}`);
+                    const d = await r.json();
+                    resDiv.innerHTML = `User: ${d.result.username}<br>Nama: ${d.result.nickname}<br>Bio: ${d.result.bio}`;
+                }
+            } catch(e) { resDiv.innerHTML = 'Error: ' + e.message; }
+        }
+
+        // INIT
+        loadMusicTrending();
     </script>
 </body>
 </html>
